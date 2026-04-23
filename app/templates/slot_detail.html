@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Редактирование слота{% endblock %}
+{% block content %}
+<section class="detail-grid">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <h1>Слот: неделя {{ slot.week }}</h1>
+        <p>{{ slot.product_direction }} · {{ slot.period }}</p>
+      </div>
+      <a class="button secondary" href="/slots">Назад</a>
+    </div>
+
+    <div class="summary-grid">
+      <div><span>Код слота</span><strong>{{ slot.slot_code }}</strong></div>
+      <div><span>Статус</span><strong>{{ slot.status }}</strong></div>
+      <div><span>Филиал</span><strong>{{ slot.branch or '—' }}</strong></div>
+      <div><span>Приоритет</span><strong>{{ slot.priority or '—' }}</strong></div>
+    </div>
+  </div>
+
+  <form class="panel form-grid" method="post" action="/slot/{{ slot.id }}">
+    <input type="hidden" name="redirect_to" value="/slot/{{ slot.id }}">
+
+    <label>
+      <span>Статус</span>
+      <select name="status" required>
+        {% for item in meta.statuses %}
+          <option value="{{ item }}" {% if slot.status == item %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
+      <span>Филиал</span>
+      <input list="branches" name="branch" value="{{ slot.branch or '' }}" placeholder="Например, Москва">
+      <datalist id="branches">
+        {% for item in meta.branches %}
+          <option value="{{ item }}"></option>
+        {% endfor %}
+      </datalist>
+    </label>
+
+    <label>
+      <span>Контакт</span>
+      <input type="text" name="contact" value="{{ slot.contact or '' }}" placeholder="ФИО, телефон, e-mail">
+    </label>
+
+    <label>
+      <span>Приоритет</span>
+      <select name="priority">
+        <option value="">—</option>
+        {% for item in meta.priorities %}
+          <option value="{{ item }}" {% if slot.priority == item %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label class="full-width">
+      <span>Цель визита</span>
+      <textarea name="visit_goal" rows="4" placeholder="Что нужно сделать в командировке">{{ slot.visit_goal or '' }}</textarea>
+    </label>
+
+    <label class="full-width">
+      <span>Комментарий</span>
+      <textarea name="comment" rows="5" placeholder="Комментарий как в таблице Excel">{{ slot.comment or '' }}</textarea>
+    </label>
+
+    <div class="form-actions full-width">
+      <button class="button" type="submit">Сохранить</button>
+      <a class="button secondary" href="/">К матрице</a>
+    </div>
+  </form>
+
+  <form class="panel" method="post" action="/slot/{{ slot.id }}/delete" onsubmit="return confirm('Удалить слот?')">
+    <div class="panel-head">
+      <div>
+        <h2>Удаление слота</h2>
+        <p>Используй только если слот больше не нужен в календаре.</p>
+      </div>
+      <button class="button danger" type="submit">Удалить слот</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Календарь командировок{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div>
+        <a href="/" class="brand">Календарь командировок</a>
+        <div class="subtitle">Бронирование недель по товарным направлениям</div>
+      </div>
+      <nav class="nav">
+        <a href="/">Матрица</a>
+        <a href="/slots">Все слоты</a>
+        <a href="/slots/new">Новый слот</a>
+        <a href="/api/summary" target="_blank" rel="noreferrer">API</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-content">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

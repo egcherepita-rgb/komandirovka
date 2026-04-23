@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Матрица бронирования{% endblock %}
+{% block content %}
+<section class="stats-grid">
+  <div class="stat-card"><span>Всего слотов</span><strong>{{ stats.total }}</strong></div>
+  <div class="stat-card"><span>Свободно</span><strong>{{ stats.free }}</strong></div>
+  <div class="stat-card"><span>Предзапрос</span><strong>{{ stats.pre }}</strong></div>
+  <div class="stat-card"><span>Забронировано</span><strong>{{ stats.booked }}</strong></div>
+  <div class="stat-card"><span>Отменено</span><strong>{{ stats.cancelled }}</strong></div>
+  <div class="stat-card"><span>Отпуск</span><strong>{{ stats.vacation }}</strong></div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h1>Матрица бронирования</h1>
+      <p>По строкам — товарные направления, по колонкам — недели года.</p>
+    </div>
+    <a class="button secondary" href="/slots">Открыть список слотов</a>
+  </div>
+
+  <div class="legend">
+    <span class="badge free">Свободно</span>
+    <span class="badge pre">Предзапрос</span>
+    <span class="badge booked">Забронировано</span>
+    <span class="badge cancelled">Отменено</span>
+    <span class="badge vacation">Отпуск</span>
+  </div>
+
+  <div class="table-wrap">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th class="sticky-col sticky-head">Товарное направление</th>
+          {% for week in weeks %}
+            <th class="sticky-head">
+              <div>Неделя {{ week }}</div>
+              <small>{{ periods[week] }}</small>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for direction in directions %}
+          <tr>
+            <td class="sticky-col row-title">{{ direction }}</td>
+            {% for week in weeks %}
+              {% set slot = matrix[direction].get(week) %}
+              <td>
+                {% if slot %}
+                <a class="slot-card {{ slot.status|status_class }}" href="/slot/{{ slot.id }}">
+                  <strong>{{ slot.status }}</strong>
+                  <span>{{ slot.branch or '—' }}</span>
+                  <small>{{ slot.contact or slot.priority or 'Открыть' }}</small>
+                </a>
+                {% else %}
+                <div class="slot-card muted">—</div>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

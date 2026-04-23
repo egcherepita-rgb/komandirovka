@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Новый слот{% endblock %}
+{% block content %}
+<section class="detail-grid">
+  <form class="panel form-grid" method="post" action="/slots/new">
+    <div class="panel-head">
+      <div>
+        <h1>Новый слот</h1>
+        <p>Создание нового слота бронирования без Excel.</p>
+      </div>
+      <a class="button secondary" href="/slots">Назад</a>
+    </div>
+
+    <label>
+      <span>Неделя</span>
+      <input type="number" name="week" min="1" max="53" required placeholder="Например, 18">
+    </label>
+
+    <label>
+      <span>Период</span>
+      <input type="text" name="period" required placeholder="Например, 27.04–03.05">
+    </label>
+
+    <label>
+      <span>Товарное направление</span>
+      <input list="directions" name="product_direction" required placeholder="Например, Гардеробные системы">
+      <datalist id="directions">
+        {% for item in meta.directions %}
+          <option value="{{ item }}"></option>
+        {% endfor %}
+      </datalist>
+    </label>
+
+    <label>
+      <span>Статус</span>
+      <select name="status" required>
+        {% for item in meta.statuses %}
+          <option value="{{ item }}" {% if item == 'Свободно' %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>
+      <span>Филиал</span>
+      <input list="branches" name="branch" placeholder="Например, Москва">
+      <datalist id="branches">
+        {% for item in meta.branches %}
+          <option value="{{ item }}"></option>
+        {% endfor %}
+      </datalist>
+    </label>
+
+    <label>
+      <span>Контакт</span>
+      <input type="text" name="contact" placeholder="ФИО, телефон, e-mail">
+    </label>
+
+    <label>
+      <span>Приоритет</span>
+      <select name="priority">
+        <option value="">—</option>
+        {% for item in meta.priorities %}
+          <option value="{{ item }}" {% if item == 'Средний' %}selected{% endif %}>{{ item }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label class="full-width">
+      <span>Цель визита</span>
+      <textarea name="visit_goal" rows="4" placeholder="Что нужно сделать в командировке"></textarea>
+    </label>
+
+    <label class="full-width">
+      <span>Комментарий</span>
+      <textarea name="comment" rows="5" placeholder="Комментарий"></textarea>
+    </label>
+
+    <div class="form-actions full-width">
+      <button class="button" type="submit">Создать слот</button>
+      <a class="button secondary" href="/">К матрице</a>
+    </div>
+  </form>
+</section>
+{% endblock %}
